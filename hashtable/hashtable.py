@@ -123,7 +123,36 @@ class HashTable:
         Implement this.
         """
         # Your code here
-
+        currIndex = self.hash_index(key)
+        if self.storage[currIndex].key == key:
+            if self.storage[currIndex].next == None:
+                self.storage[currIndex] = None
+                self.count -= 1
+            else:
+                new_head = self.storage[currIndex].next
+                self.storage[currIndex].next = None
+                self.storage[currIndex] = new_head
+                self.count -= 1
+        else:
+            if self.storage[currIndex] == None:
+                return None
+            else:
+                curr = self.storage[currIndex]
+                prev = None
+                while curr.next is not None and curr.key != key:
+                    prev = curr
+                    curr = curr.next
+                if curr.key == key:
+                    prev.next = curr.next
+                    self.count -= 1
+                    return curr.value
+                else:
+                    return None
+        if self.get_load_factor() < .2:
+            if self.capacity/2 > 8:
+                self.resize(self.capacity//2)
+            elif self.capacity > 8:
+                self.resize(8)
 
     def get(self, key):
         """

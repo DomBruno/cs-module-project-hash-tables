@@ -58,9 +58,14 @@ class HashTable:
 
         Implement this, and/or DJB2.
         """
-
+       
         # Your code here
-
+        # Base Hash
+        hash = 14695981039346656037
+        for x in key:
+            hash = hash ^ ord(x)
+            hash = (hash * 1099411628211)
+        return hash
 
     def djb2(self, key):
         """
@@ -69,7 +74,10 @@ class HashTable:
         Implement this, and/or FNV-1.
         """
         # Your code here
-
+        hashed = 5381
+        for c in key:
+            hashed = (hashed * 33) + ord(c)
+            return hashed
 
     def hash_index(self, key):
         """
@@ -88,7 +96,23 @@ class HashTable:
         Implement this.
         """
         # Your code here
-
+        currIndex = self.hash_index(key)
+        if(self.storage[currIndex] == None):
+            self.storage[currIndex] = HashTableEntry(key, value)
+            self.count += 1
+        else:
+            curr = self.storage[currIndex]
+            while curr.next != None and curr.key != key:
+                curr = curr.next
+            if curr.key == key:
+                curr.value = value
+            else:
+                new_entry = HashTableEntry(key, value)
+                new_entry.next = self.storage[currIndex]
+                self.storage[currIndex] = new_entry
+                self.count += 1
+        if self.get_load_factor() > .7:
+            self.resize(self.capacity * 2)
 
     def delete(self, key):
         """

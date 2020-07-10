@@ -84,8 +84,8 @@ class HashTable:
         Take an arbitrary key and return a valid integer index
         between within the storage capacity of the hash table.
         """
-        #return self.fnv1(key) % self.capacity
-        return self.djb2(key) % self.capacity
+        return self.fnv1(key) % self.capacity
+        # return self.djb2(key) % self.capacity
 
     def put(self, key, value):
         """
@@ -185,7 +185,13 @@ class HashTable:
         Implement this.
         """
         # Your code here
-
+        old_table = self.storage[:]
+        self.capacity = new_capacity
+        self.storage = [None] * new_capacity
+        for i in range(len(old_table)):
+            if old_table[i] is not None:
+                curr = old_table[i]
+                self.put(curr.key, curr.value)
 
 
 if __name__ == "__main__":
